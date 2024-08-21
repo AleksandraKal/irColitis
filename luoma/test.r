@@ -77,3 +77,72 @@ beta <- tcr_sequences %>%
     relocate(c(v_gene.1, j_gene.1, cdr3.1, v_gene.2, j_gene.2, cdr3.2), .after = barcode)
 new_names <- c("v_gene" = "TRBV", "d_gene" = "TRBD", "j_gene" = "TRBJ", "cdr3" = "CDR3beta")
 names(beta) <- str_replace_all(names(beta), new_names)
+
+
+# gamma-delta TCRs
+gdT_tcr_files <- list.files(path = paste(getwd(), "/data/luoma/annotations", sep = ""), pattern = "gdTCR")
+for (file in gdT_tcr_files) {
+    gdTCR <- read.csv(file = paste(getwd(), "/data/luoma/annotations/", file, sep = "")) %>%
+        filter(is_cell == "True" & high_confidence == "True" & full_length == "True" & productive == "True") %>%
+        dplyr::select(barcode, chain, v_gene, d_gene, j_gene, cdr3, reads)
+    pat <- str_extract(file, "(?<=_)[^_-]+(?=-)")
+    # replace -1 at barcode with the patient
+    gdTCR$barcode <- gsub("1", pat, gdTCR$barcode)
+    if (file == gdT_tcr_files[1]) {
+        gdTCR_sequences <- gdTCR
+    } else {
+        gdTCR_sequences <- rbind(gdTCR_sequences, gdTCR)
+    }
+}
+unique(gdTCR_sequences$chain)
+
+
+gamma <- gdTCR_sequences %>%
+    filter(chain == "TRG") %>%
+    group_by(barcode) %>%
+    top_n(n = 4, wt = reads) %>%
+    ungroup() %>%
+    dplyr::select(-chain, -d_gene, -reads) %>%
+    group_by(barcode) %>%
+    mutate(row_number = row_number()) %>%
+    pivot_wider(names_from = row_number, values_from = c(v_gene, j_gene, cdr3), names_glue = "{.value}.{row_number}") %>%
+    ungroup() %>%
+    relocate(c(v_gene.1, j_gene.1, cdr3.1, v_gene.2, j_gene.2, cdr3.2, v_gene.3, j_gene.3, cdr3.3), .after = barcode)
+new_names <- c("v_gene" = "TRGV", "j_gene" = "TRGJ", "cdr3" = "CDR3gamma")
+names(gamma) <- str_replace_all(names(gamma), new_names)
+
+delta <- gdTCR_sequences %>%
+    filter(chain == "TRD") %>%
+    group_by(barcode) %>%
+    top_n(n = 4, wt = reads) %>%
+    ungroup() %>%
+    dplyr::select(-chain, -reads) %>%
+    group_by(barcode) %>%
+    mutate(row_number = row_number()) %>%
+    pivot_wider(names_from = row_number, values_from = c(v_gene, d_gene, j_gene, cdr3), names_glue = "{.value}.{row_number}") %>%
+    ungroup() %>%
+    relocate(c(v_gene.1, d_gene.1, j_gene.1, cdr3.1, v_gene.2, d_gene.2, j_gene.2, cdr3.2, v_gene.3, d_gene.3, j_gene.3, cdr3.3), .after = barcode)
+new_names <- c("v_gene" = "TRDV", "d_gene" = "TRDD", "j_gene" = "TRDJ", "cdr3" = "CDR3delta")
+names(delta) <- str_replace_all(names(delta), new_names)
+
+ab_tcrs <- merge(alpha, beta, by = "barcode", all = TRUE)
+gd_tcrs <- merge(gamma, delta, by = "barcode", all = TRUE)
+tcr_merged <- merge(ab_tcrs, gd_tcrs, by = "barcode", all = TRUE)
+# change to upper case
+names(tcr_merged)[1] <- "Barcode"
+tcr_merged$PairedTCR <- "no"
+# see if have matching AB
+tcr_merged$PairedTCR[!is.na(tcr_merged$TRAV.1) & !is.na(tcr_merged$TRBV.1)] <- "yes"
+# move the columns around
+tcr_merged <- tcr_merged %>% relocate(PairedTCR, .after = Barcode)
+# keep only rows in the metadata (CD3, CD4 AND CD8)
+tcr_merged <- tcr_merged[which(tcr_merged$Barcode %in% metadata$Barcode), ]
+
+
+# merge with total metadata
+metadata_all <- merge(metadata, tcr_merged, by = "Barcode", all.x = TRUE)
+metadata_all$HaveTCR <- "yes"
+metadata_all$HaveTCR[which(is.na(metadata_all$PairedTCR))] <- "no"
+metadata_annot <- metadata_all %>% relocate(c(HaveTCR), .before = PairedTCR)
+
+saveRDS(metadata_annot, file = "lumoa_annotations.r")

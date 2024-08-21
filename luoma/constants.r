@@ -13,10 +13,15 @@
 #     Diagnosis  = {"colitis", "Entero-colitis","enteritis" "Normal"}
 #     CTCAE = 0-5
 #     MES (Mayo Endoscopic Score ) = 0-5
-# RECIST_response = {PD= progressive disease, PR= partial response, SD= stable disease}
-# Overall_survival (months )= number (Overall Survival (months) from CPI initiation to)
-# Status = {"deceased", "alive"}
+#     RECIST_response = {PD= progressive disease, PR= partial response, SD= stable disease}
+#     Overall_survival (months )= number (Overall Survival (months) from CPI initiation to)
+#     Status = {"deceased", "alive"}
+#     Other_irAEs = {"None"(Ici therapy and doesnt have - string), NA(healthy), "irEntero-colitis", "irEnteritis"}
+#     Drug = {Anti-CTLA-4,"Anti-PD-1, Anti-CTLA-4",  "None"},
+#     DrugName = {Ipilimumab (Anti-CTLA4), "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)", NA},
+#     DrugType = {"Monotherapy", "Combination", NA}
 # )
+
 
 
 # list(
@@ -36,6 +41,12 @@
 #     Status <-
 # )
 
+mapClass_short <- list(
+    "IRC" = "Colitis",
+    "ICI" = "No-Colitis",
+    "H" = "Control"
+)
+
 patient_metadata <- list(
     "C1" = list(
         Treatment = "Ipilimumab",
@@ -51,7 +62,14 @@ patient_metadata <- list(
         MES = 1,
         RECIST_response = "PD",
         Overall_survival = 4.2,
-        Status = "deceased"
+        Status = "deceased",
+        # created from assumptions - TODO: clean out to decrease depedencies
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "None",
+        Drug = "Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4)",
+        DrugType = "Monotherapy"
     ),
     "C2" = list(
         Treatment = "Ipilimumab",
@@ -67,7 +85,13 @@ patient_metadata <- list(
         MES = 1,
         RECIST_response = "PR",
         Overall_survival = 13.0,
-        Status = "deceased"
+        Status = "deceased",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "None",
+        Drug = "Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4)",
+        DrugType = "Monotherapy"
     ),
     "C3" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -83,7 +107,13 @@ patient_metadata <- list(
         MES = 2,
         RECIST_response = "PR",
         Overall_survival = 17.5,
-        Status = "alive"
+        Status = "alive",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "None",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "C4" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -99,7 +129,13 @@ patient_metadata <- list(
         MES = 2,
         RECIST_response = "PD",
         Overall_survival = 6.1,
-        Status = "deceased"
+        Status = "deceased",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "irEntero-colitis",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "C5" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -115,7 +151,13 @@ patient_metadata <- list(
         MES = 2,
         RECIST_response = "SD",
         Overall_survival = 13.9,
-        Status = "alive"
+        Status = "alive",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "irEntero-colitis",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "C6" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -131,7 +173,13 @@ patient_metadata <- list(
         MES = 1,
         RECIST_response = "PR",
         Overall_survival = 13.2,
-        Status = "alive"
+        Status = "alive",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "irEntero-colitis",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "C7" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -147,7 +195,14 @@ patient_metadata <- list(
         MES = 2,
         RECIST_response = "PD",
         Overall_survival = 5.7,
-        Status = "deceased"
+        Status = "deceased",
+        Case = "Case",
+        Class = "irColitis",
+        Class_short = "IRC",
+        Other_irAEs = "None",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "C8" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -163,7 +218,13 @@ patient_metadata <- list(
         MES = 2,
         RECIST_response = "PD",
         Overall_survival = 11.1,
-        Status = "deceased"
+        Status = "deceased",
+        Case = "Case",
+        Class_short = "IRC",
+        Other_irAEs = "None",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "NC1" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -179,7 +240,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = "PR",
         Overall_survival = 17.5,
-        Status = "alive"
+        Status = "alive",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "irEnteritis",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "NC2" = list(
         Treatment = "none",
@@ -195,7 +262,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = "alive"
+        Status = "alive",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "None",
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "NC3" = list(
         Treatment = "Ipilimumab",
@@ -211,7 +284,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = "PD",
         Overall_survival = 15.1,
-        Status = "alive"
+        Status = "alive",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "irEnteritis",
+        Drug = "Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4)",
+        DrugType = "Monotherapy"
     ),
     "NC4" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -227,7 +306,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = "PR",
         Overall_survival = 12.6,
-        Status = "alive"
+        Status = "alive",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "None",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "NC5" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -243,7 +328,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = "PD",
         Overall_survival = 12.3,
-        Status = "deceased"
+        Status = "deceased",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "irEnteritis",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "NC6" = list(
         Treatment = "Ipilimumab + Nivolumab",
@@ -259,7 +350,13 @@ patient_metadata <- list(
         MES = 0,
         RECIST_response = "PD",
         Overall_survival = 10.4,
-        Status = "alive"
+        Status = "alive",
+        Case = "Control",
+        Class_short = "ICI",
+        Other_irAEs = "None",
+        Drug = "Anti-PD-1, Anti-CTLA-4",
+        DrugName = "Ipilimumab (Anti-CTLA4),Nivolumab (anti-PD1)",
+        DrugType = "Combination"
     ),
     "CT1" = list(
         Treatment = NA,
@@ -269,13 +366,19 @@ patient_metadata <- list(
         Stage = "1A",
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT2" = list(
         Treatment = NA,
@@ -285,13 +388,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT3" = list(
         Treatment = NA,
@@ -301,13 +410,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT4" = list(
         Treatment = NA,
@@ -317,12 +432,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT5" = list(
         Treatment = NA,
@@ -332,13 +454,19 @@ patient_metadata <- list(
         Stage = 2,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT6" = list(
         Treatment = NA,
@@ -348,13 +476,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT7" = list(
         Treatment = NA,
@@ -364,13 +498,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     ),
     "CT8" = list(
         Treatment = NA,
@@ -380,13 +520,19 @@ patient_metadata <- list(
         Stage = NA,
         Prior_Tx = NA,
         Time_from_last_Tx = NA,
-        Class = "On ICI Therapy",
+        Class = "Healthy",
         Diagnosis = "normal",
         CTCAE = 0,
         MES = 0,
         RECIST_response = NA,
         Overall_survival = NA,
-        Status = NA
+        Status = NA,
+        Case = "Control",
+        Class_short = "H",
+        Other_irAEs = NA,
+        Drug = "None",
+        DrugName = NA,
+        DrugType = NA
     )
 )
 
