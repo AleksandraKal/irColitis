@@ -172,7 +172,7 @@ metadata <- bind_rows(meta.list)
 missing_meta_cols <- setdiff(names(meta.list[[1]]), names(meta.list[[3]]))
 # group info for single patients
 grouped_meta <- metadata %>%
-    select(Patient2, missing_meta_cols) %>%
+    select(Patient2, all_of(missing_meta_cols)) %>%
     group_by(Patient2) %>%
     summarise(across(everything(), ~ .[1]))
 # add info for each patient and each column
@@ -182,7 +182,7 @@ for (pat in grouped_meta$Patient2) {
     }
 }
 
-pat_meta <- read_xlsx(path = "Supplementary Tables.xlsx", sheet = "Patients Metadata")
+pat_meta <- read_xlsx(path = paste(getwd(), "/data/thomas/Supplementary Tables.xlsx", sep = ""), sheet = "Patients Metadata")
 for (col in colnames(pat_meta)[-1]) {
     replace_vector <- setNames(pat_meta[[col]], pat_meta$Patient2)
     metadata[[col]] <- replace_vector[match(metadata$Patient2, names(replace_vector))]

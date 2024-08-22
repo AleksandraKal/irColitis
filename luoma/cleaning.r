@@ -64,7 +64,7 @@ for (file in folders) {
         missing_annotationn <- missing_annotations <- data.frame(
             Barcode = cell,
             Patient_ID = patient,
-            Group = mapClass2[[patient_info[["Class2"]]]],
+            Group = mapClass_short[[patient_info[["Class_short"]]]],
             CellType_ID = NA,
             UMAP_1 = NA,
             UMAP_2 = NA,
@@ -131,7 +131,8 @@ for (file in folders) {
 
     seurat_objects[[file]] <- seu
 }
-
+saveRDS(seurat_objects, "lumoa_seu1.r")
+save(seurat_objects, file = "lumoa_seu2.r")
 combined_seurat <- merge(seurat_objects[[1]], y = seurat_objects[-1])
 combined_seurat@meta.data$study <- "Luoma"
 metadata <- combined_seurat@meta.data
